@@ -2,10 +2,18 @@
 
 #include "utils.hpp"
 
+#include <type_traits> // std::is_standard_layout
+
 struct test_empty_tuple {
     void operator()() {
         constexpr tulip::tuple<> t_in{};
         test::is_true<sizeof(t_in) <= 1ul>();
+    }
+};
+
+struct test_tuple_standard_layout {
+    void operator()() {
+        test::is_true<std::is_standard_layout<tulip::tuple<int, float, char>>::value>();
     }
 };
 
@@ -21,5 +29,6 @@ struct test_apply_get {
 
 int main() {
     test_empty_tuple{}();
+    test_tuple_standard_layout{}();
     test_apply_get{}();
 }
